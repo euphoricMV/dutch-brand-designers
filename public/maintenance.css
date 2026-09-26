@@ -36,6 +36,12 @@ body {
   aspect-ratio: var(--w) / var(--h);
 }
 .frame img { display: block; width: 100%; height: 100%; }
+/* Portrait: center the artwork vertically. The page's bar stays at the
+   bottom of the viewport, so clip the artwork's own bar off. */
+@media (max-aspect-ratio: 6/5) {
+  .maintenance { align-items: center; }
+  .frame img { clip-path: inset(0 0 calc(100% * var(--bar) / var(--h)) 0); }
+}
 /* The artwork's top-right glow would end in a hard edge where the page
    background shows around it, so fade that edge out when it isn't flush. */
 @media (6/5 < aspect-ratio < 16/9), (aspect-ratio < 4/5) {
