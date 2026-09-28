@@ -1,14 +1,13 @@
 /* Maintenance page: the artwork is scaled to fit the viewport without
    cropping; the page background continues the artwork's edges. */
 :root {
-  --ink: #15181f;     /* artwork background */
-  --orange: #f9740f;  /* artwork bottom bar */
-  --w: 1920;          /* artwork size in px */
-  --h: 1080;
-  --bar: 12;          /* bottom bar height in px */
+  --ink: #0e1622;     /* artwork background */
+  --orange: #f9740f;  /* focus ring */
+  --w: 1672;          /* artwork size in px */
+  --h: 941;
 }
 @media (max-aspect-ratio: 6/5) {
-  :root { --w: 1080; --h: 1350; }
+  :root { --w: 941; --h: 1672; }
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
@@ -16,16 +15,13 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   background-color: var(--ink);
-  background-image: linear-gradient(var(--orange), var(--orange));
-  background-repeat: no-repeat;
-  background-position: left bottom;
-  /* bar scaled like the artwork, so it lines up with the image's own bar */
-  background-size: 100% min(calc(100vw * var(--bar) / var(--w)), calc(100dvh * var(--bar) / var(--h)));
+  /* the artwork darkens slightly toward the bottom; match it around the edges */
+  background-image: linear-gradient(#0d1520, #08101a);
   overflow: hidden;
 }
 .maintenance {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   height: 100vh;
   height: 100dvh;
@@ -36,30 +32,25 @@ body {
   aspect-ratio: var(--w) / var(--h);
 }
 .frame img { display: block; width: 100%; height: 100%; }
-/* Portrait: center the artwork vertically. The page's bar stays at the
-   bottom of the viewport, so clip the artwork's own bar off. */
-@media (max-aspect-ratio: 6/5) {
-  .maintenance { align-items: center; }
-  .frame img { clip-path: inset(0 0 calc(100% * var(--bar) / var(--h)) 0); }
-}
-/* The artwork's top-right glow would end in a hard edge where the page
-   background shows around it, so fade that edge out when it isn't flush. */
-@media (6/5 < aspect-ratio < 16/9), (aspect-ratio < 4/5) {
+/* The artwork's glow and shading would end in a hard edge where the page
+   background shows around it, so fade those edges out when they aren't flush. */
+@media (6/5 < aspect-ratio < 16/9), (aspect-ratio < 9/16) {
   .frame img {
-    /* only the right-hand side, where the glow is; keep the logo tile crisp */
-    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%), linear-gradient(to right, #000 35%, transparent 60%);
-    mask-image: linear-gradient(to bottom, transparent, #000 12%), linear-gradient(to right, #000 35%, transparent 60%);
+    /* top and bottom edges only; the content sits well inside them */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
   }
 }
-@media (aspect-ratio > 16/9), (4/5 < aspect-ratio <= 6/5) {
-  .frame img { -webkit-mask-image: linear-gradient(to left, transparent, #000 15%); mask-image: linear-gradient(to left, transparent, #000 15%); }
+@media (aspect-ratio > 16/9), (9/16 < aspect-ratio <= 6/5) {
+  /* right edge only, where the glow is; stops short of the contact cards */
+  .frame img { -webkit-mask-image: linear-gradient(to left, transparent, #000 7%); mask-image: linear-gradient(to left, transparent, #000 7%); }
 }
 .hit { position: absolute; border-radius: 1%; }
 .hit:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
 /* contact cards, positioned in % of the artwork */
-.hit-phone { left: 6.25%;  top: 79.5%; width: 22.5%;  height: 11.2%; }
-.hit-mail  { left: 30.2%;  top: 79.5%; width: 38.9%;  height: 11.2%; }
+.hit-phone { left: 10.1%; top: 79.8%; width: 25.3%; height: 9.8%; }
+.hit-mail  { left: 36.4%; top: 79.8%; width: 26.9%; height: 9.8%; }
 @media (max-aspect-ratio: 6/5) {
-  .hit-phone { left: 7%; top: 75.3%; width: 86%; height: 8.6%; }
-  .hit-mail  { left: 7%; top: 85.2%; width: 86%; height: 8.6%; }
+  .hit-phone { left: 8%; top: 70.6%; width: 84%; height: 8.6%; }
+  .hit-mail  { left: 8%; top: 80.7%; width: 84%; height: 8.6%; }
 }
